@@ -22,6 +22,9 @@ func Init() *gin.Engine {
 	//设置多语言文件
 	router.Use(middleware.SetLocale())
 
+	//ws服务端
+	router.GET("/", new(controllers.WSController).Index)
+
 	//路由分组
 	api := router.Group("/api")
 	{
@@ -77,5 +80,6 @@ func Init() *gin.Engine {
 	// 		v1.POST("/send_msg", new(admin.CommonController).SendMsg)
 	// 	}
 	// }
+
 	return router
 }
