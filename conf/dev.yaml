@@ -10,7 +10,7 @@ enable_captcha: true
 
 chat_gpt_api: 
 # 彩云天气
-caiyun_token: 3mvCFBpeZ4qWAtim
+caiyun_token: 
 
 # twilio
 twilio_sid: 
