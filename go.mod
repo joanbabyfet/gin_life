@@ -88,6 +88,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/shirou/gopsutil/v3 v3.24.4
 	github.com/spf13/viper v1.18.2
+	github.com/thedevsaddam/govalidator v1.9.10
 	github.com/twilio/twilio-go v1.20.1
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect

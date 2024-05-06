@@ -7,8 +7,8 @@ import (
 	"life/utils"
 	"strconv"
 
-	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"github.com/thedevsaddam/govalidator"
 )
 
 type ArticleController struct {
@@ -66,11 +66,21 @@ func (c *ArticleController) Detail(ctx *gin.Context) {
 
 	//参数验证
 	entity := models.Article{Id: id}
-	valid := validation.Validation{}
-	valid.Required(entity.Id, "id")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			c.ErrorJson(ctx, -1, err.Key+err.Error(), nil)
+	rules := govalidator.MapData{}
+	rules["id"] = []string{"required"}
+	messages := govalidator.MapData{}
+	messages["id"] = []string{"required:id 不能为空"}
+	opts := govalidator.Options{
+		Data:            &entity,
+		Rules:           rules,
+		Messages:        messages,
+		RequiredDefault: false,
+	}
+	valid := govalidator.New(opts)
+	e := valid.ValidateStruct()
+	if len(e) > 0 {
+		for _, err := range e {
+			c.ErrorJson(ctx, -1, err[0], nil)
 			return
 		}
 	}
@@ -104,14 +114,25 @@ func (c *ArticleController) Save(ctx *gin.Context) {
 		Author:  author,
 		Status:  int8(status),
 	}
-	valid := validation.Validation{}
+	rules := govalidator.MapData{}
+	messages := govalidator.MapData{}
 	if entity.Id > 0 {
-		valid.Required(entity.Id, "id")
+		rules["id"] = []string{"required"}
+		messages["id"] = []string{"required:id 不能为空"}
 	}
-	valid.Required(entity.Title, "title")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			c.ErrorJson(ctx, -1, err.Key+err.Error(), nil)
+	rules["title"] = []string{"required"}
+	messages["title"] = []string{"required:title 不能为空"}
+	opts := govalidator.Options{
+		Data:            &entity,
+		Rules:           rules,
+		Messages:        messages,
+		RequiredDefault: false,
+	}
+	valid := govalidator.New(opts)
+	e := valid.ValidateStruct()
+	if len(e) > 0 {
+		for _, err := range e {
+			c.ErrorJson(ctx, -1, err[0], nil)
 			return
 		}
 	}
@@ -138,11 +159,21 @@ func (c *ArticleController) Delete(ctx *gin.Context) {
 
 	//参数验证
 	entity := models.Article{Id: id}
-	valid := validation.Validation{}
-	valid.Required(entity.Id, "id")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			c.ErrorJson(ctx, -1, err.Key+err.Error(), nil)
+	rules := govalidator.MapData{}
+	messages := govalidator.MapData{}
+	rules["id"] = []string{"required"}
+	messages["id"] = []string{"required:id 不能为空"}
+	opts := govalidator.Options{
+		Data:            &entity,
+		Rules:           rules,
+		Messages:        messages,
+		RequiredDefault: false,
+	}
+	valid := govalidator.New(opts)
+	e := valid.ValidateStruct()
+	if len(e) > 0 {
+		for _, err := range e {
+			c.ErrorJson(ctx, -1, err[0], nil)
 			return
 		}
 	}
@@ -172,11 +203,21 @@ func (c *ArticleController) Enable(ctx *gin.Context) {
 
 	//参数验证
 	entity := models.Article{Id: id}
-	valid := validation.Validation{}
-	valid.Required(entity.Id, "id")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			c.ErrorJson(ctx, -1, err.Key+err.Error(), nil)
+	rules := govalidator.MapData{}
+	messages := govalidator.MapData{}
+	rules["id"] = []string{"required"}
+	messages["id"] = []string{"required:id 不能为空"}
+	opts := govalidator.Options{
+		Data:            &entity,
+		Rules:           rules,
+		Messages:        messages,
+		RequiredDefault: false,
+	}
+	valid := govalidator.New(opts)
+	e := valid.ValidateStruct()
+	if len(e) > 0 {
+		for _, err := range e {
+			c.ErrorJson(ctx, -1, err[0], nil)
 			return
 		}
 	}
@@ -200,11 +241,21 @@ func (c *ArticleController) Disable(ctx *gin.Context) {
 
 	//参数验证
 	entity := models.Article{Id: id}
-	valid := validation.Validation{}
-	valid.Required(entity.Id, "id")
-	if valid.HasErrors() {
-		for _, err := range valid.Errors {
-			c.ErrorJson(ctx, -1, err.Key+err.Error(), nil)
+	rules := govalidator.MapData{}
+	messages := govalidator.MapData{}
+	rules["id"] = []string{"required"}
+	messages["id"] = []string{"required:id 不能为空"}
+	opts := govalidator.Options{
+		Data:            &entity,
+		Rules:           rules,
+		Messages:        messages,
+		RequiredDefault: false,
+	}
+	valid := govalidator.New(opts)
+	e := valid.ValidateStruct()
+	if len(e) > 0 {
+		for _, err := range e {
+			c.ErrorJson(ctx, -1, err[0], nil)
 			return
 		}
 	}

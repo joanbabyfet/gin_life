@@ -8,11 +8,11 @@ import (
 	"life/utils"
 	"net/http"
 
-	"github.com/beego/beego/v2/core/logs"
-	"github.com/beego/beego/validation"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"github.com/lexkong/log"
 	"github.com/spf13/viper"
+	"github.com/thedevsaddam/govalidator"
 )
 
 type WSController struct {
@@ -49,7 +49,7 @@ func (c *WSController) Index(ctx *gin.Context) {
 
 	conn, err = upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
-		//logs.Error(err)
+		//log.Error("websocket读取客户端数据错误", err)
 		//http.NotFound(ctx.Writer, ctx.Request)
 		//return
 		goto ERR
@@ -72,7 +72,7 @@ func (c *WSController) Index(ctx *gin.Context) {
 		//循环读取客户端送来的数据
 		_, data, err := conn.ReadMessage()
 		if err != nil {
-			//logs.Error(err)
+			//log.Error("websocket连接错误", err)
 			//return //退出循环，并且代码不会再执行后面的语句
 			goto ERR
 		}
@@ -86,11 +86,24 @@ func (c *WSController) Index(ctx *gin.Context) {
 			json.Unmarshal(data, &revMsg)
 
 			//参数验证
-			valid := validation.Validation{}
-			valid.Required(revMsg.Action, "action")
-			//valid.Required(revMsg.Token, "token")
-			if valid.HasErrors() {
-				conn.WriteMessage(websocket.TextMessage, []byte("invalid request, received->"+string(data)))
+			rules := govalidator.MapData{}
+			rules["action"] = []string{"required"}
+			rules["token"] = []string{"required"}
+			messages := govalidator.MapData{}
+			messages["action"] = []string{"required:action 不能为空"}
+			messages["token"] = []string{"required:token 不能为空"}
+			opts := govalidator.Options{
+				Data:            &revMsg,
+				Rules:           rules,
+				Messages:        messages,
+				RequiredDefault: false,
+			}
+			valid := govalidator.New(opts)
+			e := valid.ValidateStruct()
+			if len(e) > 0 {
+				for _, err := range e {
+					conn.WriteMessage(websocket.TextMessage, []byte("invalid request, received->"+err[0]))
+				}
 			}
 
 			if revMsg.Action == "hardware" { //系统信息
@@ -130,7 +143,7 @@ func (c *WSController) Index(ctx *gin.Context) {
 	}
 
 ERR:
-	logs.Error(err)
+	log.Error("websocket", err)
 	conn.Close()
 }
 
