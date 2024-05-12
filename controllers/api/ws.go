@@ -19,9 +19,9 @@ type WSController struct {
 	BaseController
 }
 
-// 接收消息结构体
+// 接收消息结构体, 记得加`json:"action"`不然会报错
 type receiveMessage struct {
-	Action string
+	Action string `json:"action"`
 	//Token  string
 }
 
@@ -88,10 +88,10 @@ func (c *WSController) Index(ctx *gin.Context) {
 			//参数验证
 			rules := govalidator.MapData{}
 			rules["action"] = []string{"required"}
-			rules["token"] = []string{"required"}
+			//rules["token"] = []string{"required"}
 			messages := govalidator.MapData{}
 			messages["action"] = []string{"required:action 不能为空"}
-			messages["token"] = []string{"required:token 不能为空"}
+			//messages["token"] = []string{"required:token 不能为空"}
 			opts := govalidator.Options{
 				Data:            &revMsg,
 				Rules:           rules,
