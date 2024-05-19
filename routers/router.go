@@ -23,7 +23,7 @@ func Init() *gin.Engine {
 	router.Use(middleware.SetLocale())
 
 	//ws服务端
-	router.GET("/", new(controllers.WSController).Index)
+	router.GET("/ws", new(controllers.WSController).Index)
 
 	//路由分组
 	api := router.Group("/api")
